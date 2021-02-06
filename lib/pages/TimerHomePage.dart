@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mytimer/main.dart';
 import 'package:mytimer/models/timermodel.dart';
+import 'package:mytimer/pages/settings.dart';
 import 'package:mytimer/widgets/ProductivityButton.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -8,15 +9,35 @@ import '../timer.dart';
 
 class TimerHomePage extends StatelessWidget {
   final CountDownTimer timer;
+
   TimerHomePage({this.timer});
 
   @override
   Widget build(BuildContext context) {
+    final List<PopupMenuItem<String>> menuItems = [];
+    menuItems.add(
+      PopupMenuItem(
+        value: 'Settings',
+        child: Text('Settings'),
+      ),
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Work Timer App',
         ),
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (BuildContext context) {
+              return menuItems.toList();
+            },
+            onSelected: (selectedOption) {
+              if (selectedOption == 'Settings') {
+                goToSettings(context);
+              }
+            },
+          )
+        ],
       ),
       body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
@@ -50,6 +71,7 @@ class TimerHomePage extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline4,
               ),
               progressColor: Color(0xff009688),
+              reverse: true,
             ),
           );
         });
@@ -108,6 +130,15 @@ class TimerHomePage extends StatelessWidget {
         ),
         Padding(padding: EdgeInsets.all(defaultPadding)),
       ],
+    );
+  }
+
+  void goToSettings(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SettingsPage(),
+      ),
     );
   }
 }
